@@ -1,0 +1,5 @@
+.env
+.venv
+feeds.json
+__pycache__/
+test*.py
