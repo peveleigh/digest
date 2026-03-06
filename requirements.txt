@@ -2,3 +2,5 @@ python-dotenv==1.2.2
 psycopg[binary,pool]==3.3.3
 newspaper4k==0.9.5
 openai==2.25.0
+APScheduler==3.11.2
+pytz==2026.1.post1
