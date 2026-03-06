@@ -1,5 +1,5 @@
 import os
-import psycopg2
+import psycopg
 
 from digest.models import NewsArticle
 
@@ -11,7 +11,7 @@ class DatabaseHandler:
     def connect(self):
         """Creates a connection to the database."""
         if not self.conn or self.conn.closed:
-            self.conn = psycopg2.connect(self.db_url)
+            self.conn = psycopg.connect(self.db_url)
 
     def init_db(self):
         """Initializes the schema if it doesn't exist."""
@@ -67,7 +67,7 @@ class DatabaseHandler:
             return cur.fetchone() is not None
 
     def __enter__(self):
-        self.conn = psycopg2.connect(self.db_url)
+        self.conn = psycopg.connect(self.db_url)
         return self
 
     def __exit__(self, *args):
