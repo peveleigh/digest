@@ -110,7 +110,7 @@ class DatabaseHandler:
         query = """
             SELECT url, title, content, summary, published, scraped_at, category
             FROM news_articles
-            WHERE published >= NOW() - INTERVAL '%s hours'
+            WHERE published >= NOW() - (%s * INTERVAL '1 hour')
             AND reviewed = FALSE
             AND category = %s
         """
