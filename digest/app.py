@@ -43,7 +43,7 @@ def summarize():
             articles = db.get_recent_articles(category,hours=12)
             
             if not articles:
-                summary = "No new articles found."
+                continue
             else:
                 news = ""
                 for a in articles:
