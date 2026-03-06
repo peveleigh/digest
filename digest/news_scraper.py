@@ -76,12 +76,14 @@ class NewsScraper:
             rss_feeds = json.load(file)
 
         with DatabaseHandler(self.db_url) as db:
+            scraped = False
             for rss_feed in rss_feeds:
                 rss_url = rss_feed['url']
                 rss_category = rss_feed['category']
                 
                 article_urls = self._get_article_urls(rss_url)
                 
+
                 for article_url in article_urls:
                     if self._should_skip(article_url):
                         continue
@@ -92,8 +94,10 @@ class NewsScraper:
                             db.save_page(data)
                             print(f"[OK] {article_url}")
                             sleep(3)  # Rate limiting
+                            scraped = True
                         except Exception as e:
                             print(f"[Error] {article_url}: {e}")
-            
+            if not scraped:
+                print("Nothing to scrape")
             db.commit()
 

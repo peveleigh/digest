@@ -3,3 +3,4 @@
 feeds.json
 __pycache__/
 test*.py
+docker-compose.yml
