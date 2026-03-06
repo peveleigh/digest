@@ -102,7 +102,7 @@ class DatabaseHandler:
                 category=row[6]
             )
 
-    def get_recent_unreviewed_articles(self, category: str, hours: int = 12):
+    def get_recent_articles(self, category: str, hours: int = 12):
         """
         Fetches articles by category published within the last X hours 
         that haven't been reviewed.

@@ -43,6 +43,39 @@ class NewsSummarizer:
         """
         return self.call_model(prompt)
 
+    def summarize_article_list(self, articles):
+        prompt = f"""
+        You are a professional news editor. Summarize the key events and trends from the past 24 hours based on the news articles and format template provided below.
+
+        ## Guidelines:
+        - Distinguish between major headlines and minor stories; prioritize the most significant developments.
+        - Do not fabricate details that are not supported or clearly implied by the titles.
+        - If a story appears in multiple titles, note it as a trending/developing story.
+        - Use a neutral, objective tone.
+        - Keep the summary concise (aim for a few short paragraphs).
+        - If articles contain contradictory claims, acknowledge the discrepancy rather than choosing one version.
+        - Group related stories together under a single bullet point rather than listing them separately.
+        - If the provided articles are insufficient to identify clear major vs. minor distinctions, state that explicitly rather than guessing.
+
+        ## Articles:
+        {articles}
+
+        ## Format template:
+        ### 📈 Developing/Trending Stories:
+        - Stories appearing across multiple articles with brief synthesis
+
+        ### 🔴 Major News:
+        - **[Topic/Category]:** Most important story text
+        - **[Topic/Category]:** More important news
+
+        ### 🟡 Minor News:
+        - Minor news story text
+
+        ### Summary:
+        A 2-3 sentence overview capturing the dominant narrative of the news cycle.
+        """
+        return self.call_model(prompt)
+
     def summarize_single_article(self, title, content):
         """
         Sends the article to the LLM and returns the summary.

@@ -2,6 +2,8 @@ import feedparser
 import json
 import newspaper
 import os
+import requests
+
 from datetime import datetime
 from time import sleep
 from typing import List, Dict
@@ -17,8 +19,7 @@ class NewsScraper:
         self.model = model
         self.feeds_file = feeds_file
         
-        # Configure feedparser global user agent
-        feedparser.USER_AGENT = user_agent
+        self.user_agent = user_agent
         
         # Initialize Summarizer
         self.summarizer = NewsSummarizer(self.api_key, self.model)
@@ -39,7 +40,18 @@ class NewsScraper:
 
     def _get_article_urls(self, rss_url: str) -> List[str]:
         """Parses an RSS feed and returns a list of links."""
-        feed = feedparser.parse(rss_url)
+
+        headers = {
+            'User-Agent': self.user_agent
+        }
+
+        # Use requests to get the data
+        response = requests.get(rss_url, headers=headers, timeout=10)
+        
+        # Raise an error for bad status codes (4xx, 5xx)
+        response.raise_for_status()
+
+        feed = feedparser.parse(response.content)
         return [entry.link for entry in feed.entries]
 
     def _fetch_article_data(self, article_url: str, category: str) -> NewsArticle:

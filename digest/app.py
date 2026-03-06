@@ -18,6 +18,7 @@ user_agent = os.getenv("USER_AGENT")
 gotify_url = os.getenv("GOTIFY_URL")
 gotify_token = os.getenv("GOTIFY_TOKEN")
 
+
 feeds_file = "feeds.json"
 
 def scrape():
@@ -32,25 +33,26 @@ def scrape():
     scraper.run()
 
 def summarize():
-    # Using the context manager (__enter__ / __exit__) handles connection/closing
+
     with DatabaseHandler(db_url) as db:
-        #print("Fetching unreviewed articles from the last 24 hours...")
         
         ns = NewsSummarizer(api_key,model)
 
         for category in ["world","local","business","technology"]:
 
-            #print(category)
-            articles = db.get_recent_unreviewed_articles(category,hours=24)
+            articles = db.get_recent_articles(category,hours=12)
             
             if not articles:
-                print("No new articles found.")
-                continue
+                summary = "No new articles found."
+            else:
+                news = ""
+                for a in articles:
+                    news = news + f"Title: {a.title} \n"
+                    news = news + f"Content: {a.summary} \n"
+                    news = news + "---\n"
+                news = news[:-5]
+                summary = ns.summarize_article_list(news)
 
-            article_titles = "\n".join([a.title for a in articles])
-            
-            summary = ns.summarize_title_list(article_titles)
-            #summary = category
             send_gotify_notification(
                 gotify_url,
                 gotify_token,
@@ -60,20 +62,16 @@ def summarize():
             )
 
 def main():
-    # 1. Set up the argument parser
     parser = argparse.ArgumentParser(description="A tool to scrape data or summarize content.")
     
-    # 2. Add a positional argument that accepts 'scrape' or 'summarize'
     parser.add_argument(
         "action", 
         choices=["scrape", "summarize"], 
         help="The function you want to run: 'scrape' or 'summarize'"
     )
 
-    # 3. Parse the arguments from the command line
     args = parser.parse_args()
 
-    # 4. Run the logic based on the input
     if args.action == "scrape":
         result = scrape()
         
