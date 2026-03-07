@@ -25,7 +25,7 @@ class NewsScraper:
         self.summarizer = NewsSummarizer(self.api_key, self.model)
         
         # Constants for filtering
-        self.URL_SKIP_PATTERNS = ["/livestory/","/video/","/sports/","/tv-shows/"]
+        self.URL_SKIP_PATTERNS = ["/livestory/","/video/","/sports/","/tv-shows/","/player/"]
         self.URL_REQUIRE_PATTERNS = ["www.cbc.ca/news/"]
 
     def _should_skip(self, url: str) -> bool:
