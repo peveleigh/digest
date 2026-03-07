@@ -25,16 +25,12 @@ class NewsScraper:
         self.summarizer = NewsSummarizer(self.api_key, self.model)
         
         # Constants for filtering
-        self.URL_SKIP_PATTERNS = ["/livestory/"]
+        self.URL_SKIP_PATTERNS = ["/livestory/","/video/","/sports/","/tv-shows/"]
         self.URL_REQUIRE_PATTERNS = ["www.cbc.ca/news/"]
 
     def _should_skip(self, url: str) -> bool:
         """Internal logic to determine if a URL should be ignored."""
-        if "www.cbc.ca" not in url:
-            return False
         if any(pattern in url for pattern in self.URL_SKIP_PATTERNS):
-            return True
-        if not any(pattern in url for pattern in self.URL_REQUIRE_PATTERNS):
             return True
         return False
 
@@ -57,8 +53,8 @@ class NewsScraper:
     def _fetch_article_data(self, article_url: str, category: str) -> NewsArticle:
         """Downloads, parses, and summarizes a single article."""
         article = newspaper.article(article_url)
-        summary = self.summarizer.summarize_single_article(article.title, article.text)
-        
+        #summary = self.summarizer.summarize_single_article(article.title, article.text)
+        summary = "..."
         return NewsArticle(
             url=article_url,
             title=article.title,
