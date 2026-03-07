@@ -38,7 +38,7 @@ def summarize():
         
         ns = NewsSummarizer(api_key,model)
 
-        for category in ["world","local","business","technology"]:
+        for category in ["local","business","world"]:
 
             articles = db.get_recent_articles(category,hours=12)
             
