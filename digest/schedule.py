@@ -10,10 +10,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 t_zone = os.getenv("TIMEZONE")
-scrape_schedule_hour = os.getenv("SCRAPE_SCHEDULE_HOUR")
+scrape_schedule_hour = int(os.getenv("SCRAPE_SCHEDULE_HOUR"))
 scrape_schedule_minute = os.getenv("SCRAPE_SCHEDULE_MINUTE")
-summarize_schedule_hour = os.getenv("SUMMARIZE_SCHEDULE_HOUR")
+summarize_schedule_hour = int(os.getenv("SUMMARIZE_SCHEDULE_HOUR"))
 summarize_schedule_minute = os.getenv("SUMMARIZE_SCHEDULE_MINUTE")
+
+scrape_hours = f"{scrape_schedule_hour},{(scrape_schedule_hour + 12) % 24}"
+summarize_hours = f"{summarize_schedule_hour},{(summarize_schedule_hour + 12) % 24}"
 
 scheduler = BlockingScheduler(timezone=timezone(t_zone))
 
