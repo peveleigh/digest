@@ -20,12 +20,12 @@ summarize_hours = f"{summarize_schedule_hour},{(summarize_schedule_hour + 12) % 
 
 scheduler = BlockingScheduler(timezone=timezone(t_zone))
 
-@scheduler.scheduled_job('cron', hour=scrape_schedule_hour, minute=scrape_schedule_minute)
+@scheduler.scheduled_job('cron', hour=scrape_hours, minute=scrape_schedule_minute)
 def scrape_job():
     print("Starting scrape job...")
     scrape()
 
-@scheduler.scheduled_job('cron', hour=summarize_schedule_hour, minute=summarize_schedule_minute)
+@scheduler.scheduled_job('cron', hour=summarize_hours, minute=summarize_schedule_minute)
 def summarize_job():
     print("Starting summarize job...")
     summarize()
