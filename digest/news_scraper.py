@@ -80,7 +80,7 @@ class NewsScraper:
             for rss_feed in rss_feeds:
                 rss_url = rss_feed['url']
                 rss_category = rss_feed['category']
-                
+                print(f"Processing: {rss_url}")
                 article_urls = self._get_article_urls(rss_url)
                 
 
