@@ -48,7 +48,7 @@ def summarize():
                 news = ""
                 for a in articles:
                     news = news + f"Title: {a.title} \n"
-                    news = news + f"Content: {a.summary} \n"
+                    news = news + f"Content: {a.content} \n"
                     news = news + "---\n"
                 news = news[:-5]
                 summary = ns.summarize_article_list(news)

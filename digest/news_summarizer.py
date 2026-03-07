@@ -91,3 +91,4 @@ class NewsSummarizer:
         """
 
         return self.call_model(prompt)
+        

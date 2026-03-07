@@ -84,8 +84,11 @@ class DatabaseHandler:
         Yields NewsArticle objects where summary IS NULL.
         Uses a named server-side cursor to prevent memory overload.
         """
-        query = "SELECT url, title, content, summary, published, scraped_at, category FROM news_articles WHERE summary IS NULL"
-        
+        query = """
+            SELECT url, title, content, summary, published, scraped_at, category 
+            FROM news_articles 
+            WHERE summary IS NULL OR summary = '...'
+        """
         with self._cursor() as cur:
             cur.execute(query)
             rows = cur.fetchall()  # Fetch all results into Python memory
