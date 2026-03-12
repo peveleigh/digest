@@ -1,9 +1,13 @@
 import psycopg2
 
-DATABASE_URL="postgres://pgadmin:Tck82Xqz8Zh5@192.168.2.105:5432/pg_database_1"
+from dotenv import load_dotenv
+
+load_dotenv()
+
+db_url = os.getenv("DATABASE_URL")
 
 def get_db():
-    return psycopg2.connect(DATABASE_URL)
+    return psycopg2.connect(db_url)
 
 def init_db(conn):
     with conn.cursor() as cur:
@@ -19,6 +23,18 @@ def init_db(conn):
             )
         """)
     conn.commit()
+
+    with conn.cursor() as cur:
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS news_summaries (
+                id SERIAL PRIMARY KEY,
+                summary TEXT NOT NULL,
+                summary_date TIMESTAMP NOT NULL,
+                category TEXT NOT NULL
+            )
+        """)
+    conn.commit()
+
 
 def run():
     conn = get_db()

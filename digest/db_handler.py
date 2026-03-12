@@ -30,6 +30,20 @@ class DatabaseHandler:
             """)
         self.conn.commit()
 
+
+    def save_summary(self,summary,summary_date,category):
+        """Inserts new summary"""
+        query = """
+            INSERT INTO news_summaries (summary,summary_date,category)
+            VALUES (%s, %s, %s)
+        """
+        try:
+            with self._cursor() as cur:
+                cur.execute(query, (summary,summary_date,category))
+        except psycopg2.Error as e:
+            self.conn.rollback()
+            raise        
+
     def save_page(self, article: NewsArticle):
         """Inserts or updates page data."""
         query = """
@@ -78,6 +92,32 @@ class DatabaseHandler:
         if not self.conn or self.conn.closed:
             raise RuntimeError("Not connected. Use 'with DatabaseHandler() as db:' or call connect() first.")
         return self.conn.cursor()
+
+    def get_previous_summaries(self,category,limit=3):
+        """
+        Get previous news summaries
+        """
+        query = f"""
+            SELECT summary
+            FROM news_summaries
+            WHERE category = '{category}'
+            ORDER BY id DESC
+            LIMIT {limit}            
+        """
+
+        with self._cursor() as cur:
+            cur.execute(query)
+            rows = cur.fetchall()
+
+        previous_summaries = ""
+        idx = 1
+        for row in rows:
+            previous_summaries = previous_summaries + f"Previous summary #{idx}:\n"
+            previous_summaries = previous_summaries + row[0] + "\n---\n"
+
+        previous_summaries = previous_summaries[:-4]
+        return previous_summaries
+
 
     def get_articles_without_summary(self):
         """
