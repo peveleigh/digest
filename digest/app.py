@@ -15,6 +15,7 @@ load_dotenv()
 
 db_url = os.getenv("DATABASE_URL")
 api_key = os.getenv("API_KEY")
+base_url = os.getenv("BASE_URL")
 model = os.getenv("MODEL")
 user_agent = os.getenv("USER_AGENT")
 gotify_url = os.getenv("GOTIFY_URL")
@@ -38,7 +39,7 @@ def summarize():
 
     with DatabaseHandler(db_url) as db:
         
-        ns = NewsSummarizer(api_key,model)
+        ns = NewsSummarizer(api_key,model,base_url)
 
         for category in ["local","business","world"]:
 
@@ -54,18 +55,20 @@ def summarize():
                     news = news + f"Content: {a.content} \n"
                     news = news + "---\n"
                 news = news[:-5]
-                summary = ns.summarize_article_list(news,previous_summaries)
+                data = ns.summarize_article_list(articles, previous_summaries)
+                if data:
+                    summary = ns.format_to_markdown(data)
 
-            send_gotify_notification(
-                gotify_url,
-                gotify_token,
-                f"{category} news summary",
-                summary,
-                priority=5
-            )
+                    send_gotify_notification(
+                        gotify_url,
+                        gotify_token,
+                        f"{category} news summary",
+                        summary,
+                        priority=5
+                    )
 
-            db.save_summary(summary,datetime.now(),category)
-            db.commit()
+            #db.save_summary(summary,datetime.now(),category)
+            #db.commit()
 
 def main():
     parser = argparse.ArgumentParser(description="A tool to scrape data or summarize content.")
