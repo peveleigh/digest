@@ -67,8 +67,8 @@ def summarize():
                         priority=5
                     )
 
-            #db.save_summary(summary,datetime.now(),category)
-            #db.commit()
+            db.save_summary(summary,datetime.now(),category)
+            db.commit()
 
 def main():
     parser = argparse.ArgumentParser(description="A tool to scrape data or summarize content.")
