@@ -54,12 +54,12 @@ class NewsScraper:
     def _fetch_article_data(self, article_url: str, category: str) -> NewsArticle:
         """Downloads, parses, and summarizes a single article."""
         article = newspaper.article(article_url)
-        summary = self.summarizer.summarize_single_article(article.title, article.text)
+        #summary = self.summarizer.summarize_single_article(article.title, article.text)
         return NewsArticle(
             url=article_url,
             title=article.title,
             content=article.text,
-            summary=summary,
+            summary=None,
             published=article.publish_date,
             scraped_at=datetime.now(),
             category=category

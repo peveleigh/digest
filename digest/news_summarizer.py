@@ -104,4 +104,32 @@ Generate the updated structured news summary based on the rules provided.
             output.append(data.narrative_summary)
 
         return "\n".join(output)
-        
+
+    def call_model(self,prompt):
+        system_prompt = "You are a helpful assistant that summarizes news articles efficiently."
+        try:
+            agent = Agent(
+                self.or_model,
+                instructions=system_prompt
+            )
+            return agent.run_sync(prompt).output
+        except Exception as e:
+            print(f"Extraction Error: {e}")
+            return None
+
+
+    def summarize_single_article(self, title, content):
+        """
+        Sends the article to the LLM and returns the summary.
+        """
+        prompt = f"""
+        You are a skilled news editor. Summarize the following news article in a few sentences, capturing the key facts (who, what, when, where, why). Use a neutral, objective tone. Do not include opinions or information not present in the article.
+
+        TITLE: {title}
+
+        CONTENT: {content}
+
+        SUMMARY:
+        """
+
+        return self.call_model(prompt)
