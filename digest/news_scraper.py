@@ -28,7 +28,8 @@ class NewsScraper:
         # Constants for filtering
         self.URL_SKIP_PATTERNS = [
             "/livestory/","/video/","/sports/","/tv-shows/","/player/","/radio/",
-            "/music/","/entertainment/","/liveblog/","/commentary/","live"
+            "/music/","/entertainment/","/liveblog/","/commentary/","live",
+            "/kidsnews/"
         ]
         self.URL_REQUIRE_PATTERNS = ["www.cbc.ca/news/"]
 
